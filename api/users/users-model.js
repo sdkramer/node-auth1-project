@@ -25,11 +25,12 @@ return db('users').where({user_id: user_id}).first()
   resolves to the newly inserted user { user_id, username }
  */
 function add(user) {
-
+return db.insert(user).into('users')
 }
 
 // Don't forget to add these to the `exports` object so they can be required in other modules
 module.exports = {
   find,
-  findById
+  findById,
+  add
 }
