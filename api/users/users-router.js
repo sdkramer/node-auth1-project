@@ -1,5 +1,6 @@
 // Require the `restricted` middleware from `auth-middleware.js`. You will need it here!
 const express = require('express')
+const bcrypt = require('bcryptjs')
 const router = express.Router()
 const { find, findById, add } = require('./users-model')
 
@@ -46,7 +47,12 @@ res.json(user)
 
 router.post('/', async (req, res, next) => {
   try {
-const newUser = await add(req.body)
+const user = await req.body
+
+const hash = bcrypt.hashSync(user.password, 12)
+user.password = hash
+
+const newUser = await add(user)
 res.json(newUser)
   } catch(err) {
     next(err)

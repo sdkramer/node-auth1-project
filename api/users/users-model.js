@@ -11,7 +11,8 @@ return db('users')
   resolves to an ARRAY with all users that match the filter condition
  */
 function findBy(filter) {
-
+  return db('users')
+  .where(filter)
 }
 
 /**
@@ -31,6 +32,7 @@ return db.insert(user).into('users')
 // Don't forget to add these to the `exports` object so they can be required in other modules
 module.exports = {
   find,
+  findBy,
   findById,
   add
 }
