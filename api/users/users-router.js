@@ -3,6 +3,7 @@ const express = require('express')
 const bcrypt = require('bcryptjs')
 const router = express.Router()
 const { find, findById, add } = require('./users-model')
+const { restricted } = require('../auth/auth-middleware')
 
 /**
   [GET] /api/users
@@ -26,7 +27,7 @@ const { find, findById, add } = require('./users-model')
     "message": "You shall not pass!"
   }
  */
-router.get('/', async (req, res, next) => {
+router.get('/', restricted(), async (req, res, next) => {
   try {
     const users = await find()
     res.json(users)

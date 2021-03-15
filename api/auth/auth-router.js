@@ -50,13 +50,17 @@ router.post('/login', async (req, res, next) => {
 const {username, password} = req.body
 const user = await findBy({username}).first()
 
-const passwordValid = await bcrypt.compare(password, user.password)
+// console.log('auth user: ', user);
+
+const passwordValid = await bcrypt.compare(password, user ? user.password : '')
 
 if(!user || !passwordValid) {
   return res.status(401).json({
     message: "Invalid credentials"
   })
 }
+
+req.session.user = user
 
 res.json({
   message: `Welcome ${user.username}`
@@ -82,6 +86,19 @@ res.json({
     "message": "no session"
   }
  */
+router.get('/logout', async (req, res, next) => {
+  try {
+    req.session.destroy((err) => {
+      if (err) {
+        next(err)
+      } else {
+        res.status(204).end()
+      }
+    })
+  } catch (err) {
+    next(err)
+  }
+})
 
  
 // Don't forget to add the router to the `exports` object so it can be required in other modules

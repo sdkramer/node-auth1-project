@@ -7,6 +7,18 @@
   }
 */
 function restricted() {
+  return async (req, res, next) => {
+    try {
+      if (!req.session || !req.session.user) {
+        return res.status(403).json({
+          message: "Unauthorized to see this page",
+        })
+      }
+      next()
+    } catch (err) {
+      next(err)
+    }
+  }
 
 }
 
@@ -47,3 +59,8 @@ function checkPasswordLength() {
 }
 
 // Don't forget to add these to the `exports` object so they can be required in other modules
+
+
+module.exports = {
+  restricted,
+}
